@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Square Loans — Fund what's possible</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --sq-black: #1a1a1a;
+    --sq-blue: #006aff;
+    --sq-blue-dark: #0052cc;
+    --sq-blue-light: #e6f0ff;
+    --bg: #ffffff;
+    --bg-secondary: #f5f5f5;
+    --text-primary: #1a1a1a;
+    --text-secondary: #6b6b6b;
+    --border: rgba(0,0,0,0.1);
+    --border-hover: rgba(0,0,0,0.2);
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111111;
+      --bg-secondary: #1e1e1e;
+      --text-primary: #f0f0f0;
+      --text-secondary: #999999;
+      --border: rgba(255,255,255,0.1);
+      --border-hover: rgba(255,255,255,0.2);
+    }
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  .page-wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--sq-black);
+    border-radius: var(--radius-lg);
+    padding: 2rem 2rem 1.75rem;
+    margin-bottom: 1rem;
+  }
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: .9rem;
+  }
+  .sq-logo-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sq-wordmark {
+    font-size: 19px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: -.02em;
+  }
+  .sq-div {
+    width: 1px;
+    height: 16px;
+    background: rgba(255,255,255,.2);
+  }
+  .sq-prod {
+    font-size: 13px;
+    color: rgba(255,255,255,.45);
+    letter-spacing: .01em;
+  }
+  .hero-title {
+    font-size: 30px;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: .5rem;
+  }
+  .hero-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,.55);
+    line-height: 1.6;
+    max-width: 440px;
+    margin-bottom: 1.5rem;
+  }
+  .hero-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .hbadge {
+    background: rgba(255,255,255,.07);
+    border: 0.5px solid rgba(255,255,255,.13);
+    color: rgba(255,255,255,.75);
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ── STATS ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .stat-card {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    padding: .85rem 1rem;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .tab {
+    padding: .4rem .9rem;
+    font-size: 13px;
+    border-radius: 999px;
+    border: 0.5px solid var(--border-hover);
+    cursor: pointer;
+    background: var(--bg);
+    color: var(--text-secondary);
+    transition: all .15s;
+    font-family: inherit;
+  }
+  .tab:hover { border-color: var(--border-hover); color: var(--text-primary); }
+  .tab.active { background: var(--sq-black); color: #fff; border-color: var(--sq-black); }
+
+  /* ── PANELS ── */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── SECTION LABEL ── */
+  .slabel {
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: .65rem;
+  }
+
+  /* ── FEATURE CARDS ── */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .feature-card {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.1rem;
+    cursor: pointer;
+    transition: border-color .15s;
+  }
+  .feature-card:hover { border-color: var(--border-hover); }
+  .feature-card.active { border: 1.5px solid var(--sq-blue); }
+  .feat-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    background: var(--sq-blue-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: .6rem;
+  }
+  .feat-icon svg { width: 16px; height: 16px; stroke: var(--sq-blue-dark); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .feat-title { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 3px; }
+  .feat-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* ── DETAIL BOX ── */
+  .detail-box {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .detail-box-title { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: .75rem; }
+  .check-list { display: flex; flex-direction: column; gap: 7px; }
+  .check-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+  .check-icon { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; stroke: var(--sq-blue); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ── APPLY STEPS ── */
+  .apply-steps { display: flex; flex-direction: column; margin-bottom: 1rem; }
+  .step { display: flex; gap: 16px; }
+  .step-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 36px; }
+  .step-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--sq-black); color: #fff;
+    font-size: 13px; font-weight: 500;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .step-line { width: 2px; background: var(--border); flex: 1; min-height: 20px; margin: 4px 0; }
+  .step:last-child .step-line { display: none; }
+  .step-body { padding-bottom: 1.5rem; flex: 1; }
+  .step-title { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; padding-top: 6px; }
+  .step-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+  .step-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--sq-blue-light); color: var(--sq-blue-dark);
+    font-size: 11px; padding: 3px 10px; border-radius: 999px; margin-top: 6px;
+  }
+  .step-tag svg { width: 12px; height: 12px; stroke: var(--sq-blue-dark); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .step-note {
+    display: flex; align-items: flex-start; gap: 8px;
+    background: var(--bg-secondary); border-radius: var(--radius-md);
+    padding: .65rem .85rem; margin-top: .6rem;
+    font-size: 12px; color: var(--text-secondary); line-height: 1.5;
+  }
+  .step-note svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; stroke: var(--sq-blue); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ── FAQ ── */
+  .faq-item { border: 0.5px solid var(--border); border-radius: var(--radius-md); margin-bottom: 8px; overflow: hidden; }
+  .faq-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 12px; padding: 1rem; cursor: pointer; background: var(--bg);
+    border: none; width: 100%; text-align: left; font-family: inherit;
+  }
+  .faq-header:hover { background: var(--bg-secondary); }
+  .faq-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--sq-blue-light); display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; margin-top: 1px;
+  }
+  .faq-icon svg { width: 14px; height: 14px; stroke: var(--sq-blue-dark); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .faq-q { font-size: 13px; font-weight: 500; color: var(--text-primary); flex: 1; line-height: 1.4; }
+  .faq-chev { width: 15px; height: 15px; flex-shrink: 0; margin-top: 2px; stroke: var(--text-secondary); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
+  .faq-body { padding: .25rem 1rem 1rem 3.25rem; font-size: 13px; color: var(--text-secondary); line-height: 1.7; display: none; }
+  .faq-body.open { display: block; }
+  .faq-tip {
+    display: inline-block; background: var(--sq-blue-light); color: var(--sq-blue-dark);
+    font-size: 11px; padding: 3px 10px; border-radius: 999px; margin-top: .5rem; font-style: normal;
+  }
+
+  /* ── COMPARE ── */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+  .compare-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem; }
+  .compare-card.hl { border: 2px solid var(--sq-blue); }
+  .compare-head { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: .5rem; }
+  .compare-best {
+    display: inline-block; background: var(--sq-blue-light); color: var(--sq-blue-dark);
+    font-size: 11px; padding: 3px 10px; border-radius: 999px; margin-bottom: .5rem;
+  }
+  .compare-row { display: flex; align-items: flex-start; gap: 7px; font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; line-height: 1.4; }
+  .compare-row svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .icon-check { stroke: #1D9E75; }
+  .icon-x { stroke: #E24B4A; }
+  .icon-warn { stroke: #BA7517; }
+
+  /* ── CALCULATOR ── */
+  .calc-row { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+  .calc-row label { font-size: 13px; color: var(--text-secondary); min-width: 140px; }
+  .calc-row input[type=range] {
+    flex: 1; accent-color: var(--sq-blue);
+    height: 4px; cursor: pointer;
+  }
+  .calc-row span { font-size: 13px; font-weight: 500; min-width: 60px; text-align: right; color: var(--text-primary); }
+  .calc-results { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: .25rem; }
+  .calc-result { background: var(--bg-secondary); border-radius: var(--radius-md); padding: .85rem 1rem; display: flex; justify-content: space-between; align-items: center; }
+  .calc-result-label { font-size: 13px; color: var(--text-secondary); }
+  .calc-result-val { font-size: 20px; font-weight: 500; color: var(--text-primary); }
+  .calc-result.hl .calc-result-val { color: var(--sq-blue-dark); }
+  .calc-note { font-size: 11px; color: var(--text-secondary); margin-top: .6rem; }
+
+  /* ── QUOTES ── */
+  .quote-card {
+    background: var(--bg-secondary);
+    border-left: 3px solid var(--sq-blue);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: .9rem 1rem; margin-bottom: 8px;
+  }
+  .quote-text { font-size: 13px; color: var(--text-primary); line-height: 1.6; font-style: italic; margin-bottom: .4rem; }
+  .quote-attr { font-size: 11px; color: var(--text-secondary); }
+
+  /* ── INDUSTRY TAGS ── */
+  .industry-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: .4rem; }
+  .itag {
+    background: var(--bg-secondary); border: 0.5px solid var(--border);
+    color: var(--text-secondary); font-size: 12px; padding: 5px 12px;
+    border-radius: 999px; display: inline-flex; align-items: center; gap: 5px;
+  }
+  .itag svg { width: 13px; height: 13px; stroke: var(--sq-blue); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ── CTA BAR ── */
+  .cta-bar {
+    background: var(--sq-black); border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem; display: flex;
+    align-items: center; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap; margin-top: 1rem;
+  }
+  .cta-text { font-size: 14px; color: rgba(255,255,255,.5); }
+  .cta-text strong { color: #fff; display: block; font-size: 16px; font-weight: 500; margin-bottom: 3px; }
+  .cta-btn {
+    background: var(--sq-blue); color: #fff; border: none;
+    border-radius: var(--radius-md); padding: .65rem 1.4rem;
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    transition: background .15s; font-family: inherit;
+    display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+  }
+  .cta-btn:hover { background: var(--sq-blue-dark); }
+  .cta-btn svg { width: 14px; height: 14px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 560px) {
+    .stats-row { grid-template-columns: 1fr; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .calc-results { grid-template-columns: 1fr; }
+    .hero-title { font-size: 24px; }
+    .tabs { gap: 4px; }
+    .tab { font-size: 12px; padding: .35rem .75rem; }
+    .calc-row { flex-wrap: wrap; }
+    .calc-row label { min-width: 100%; }
+    .cta-bar { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">
+      <div class="sq-logo-group">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="1.75" y="1.75" width="20.5" height="20.5" rx="5" stroke="white" stroke-width="2.75" fill="none"/>
+          <rect x="9" y="9" width="6" height="6" rx="1.5" fill="white"/>
+        </svg>
+        <span class="sq-wordmark">Square</span>
+      </div>
+      <div class="sq-div"></div>
+      <span class="sq-prod">Banking · Loans</span>
+    </div>
+    <div class="hero-title">Fund what's possible.</div>
+    <div class="hero-sub">Fast, flexible capital built for businesses like yours — no long forms, no interest, repayments that flex with your sales.</div>
+    <div class="hero-badges">
+      <span class="hbadge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Apply in minutes
+      </span>
+      <span class="hbadge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+        No interest — one flat fee
+      </span>
+      <span class="hbadge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        Funds as fast as today
+      </span>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num">$26.5B+</div><div class="stat-label">Extended to businesses globally</div></div>
+    <div class="stat-card"><div class="stat-num">900K+</div><div class="stat-label">Businesses funded to date</div></div>
+    <div class="stat-card"><div class="stat-num">88%</div><div class="stat-label">Report business growth after funding</div></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs" role="tablist">
+    <button class="tab active" onclick="switchTab('features',this)">How it works</button>
+    <button class="tab" onclick="switchTab('apply',this)">How to apply</button>
+    <button class="tab" onclick="switchTab('calc',this)">Cost calculator</button>
+    <button class="tab" onclick="switchTab('compare',this)">Why Square Loans</button>
+    <button class="tab" onclick="switchTab('faq',this)">Common questions</button>
+    <button class="tab" onclick="switchTab('social',this)">Customer stories</button>
+  </div>
+
+  <!-- PANEL: HOW IT WORKS -->
+  <div id="panel-features" class="panel active">
+    <p class="slabel">Key features</p>
+    <div class="feature-grid">
+      <div class="feature-card active" onclick="selectFeat(this,'feat-offer')">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+        <div class="feat-title">An offer made for you</div>
+        <div class="feat-desc">Loans from $1K–$250K, tailored to how your business performs.</div>
+      </div>
+      <div class="feature-card" onclick="selectFeat(this,'feat-repay')">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+        <div class="feat-title">Repayments that flex</div>
+        <div class="feat-desc">Pay a little more on busy days, a little less when it's quiet.</div>
+      </div>
+      <div class="feature-card" onclick="selectFeat(this,'feat-speed')">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div class="feat-title">Money when you need it</div>
+        <div class="feat-desc">Funds next business day — or instantly with Square Checking.</div>
+      </div>
+      <div class="feature-card" onclick="selectFeat(this,'feat-cost')">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
+        <div class="feat-title">No surprises, ever</div>
+        <div class="feat-desc">One flat fee shown upfront. No interest. No hidden charges.</div>
+      </div>
+    </div>
+    <div id="feat-offer" class="detail-box" style="display:block">
+      <div class="detail-box-title">Your offer, based on your business</div>
+      <div class="check-list">
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Offers from $1,000 to $250,000 — no one-size-fits-all amount</div>
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Calculated from your real Square sales history, not a credit score</div>
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Check your offer in your Square Dashboard — no commitment to apply</div>
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>No hard credit pull, no personal guarantee required</div>
+      </div>
+    </div>
+    <div id="feat-repay" class="detail-box" style="display:none">
+      <div class="detail-box-title">Repayments that work around your cash flow</div>
+      <div class="check-list">
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>A fixed % of your daily card sales goes toward your loan automatically</div>
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Slow week? Your payment shrinks — no stress</div>
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Great week? You pay more and close out the loan faster</div>
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Want to pay it off early? No penalty, no extra cost</div>
+      </div>
+    </div>
+    <div id="feat-speed" class="detail-box" style="display:none">
+      <div class="detail-box-title">From application to funds — fast</div>
+      <div class="check-list">
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Takes just a few minutes to apply — no long paperwork</div>
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Money deposited the next business day to your bank</div>
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Have Square Checking? Funds hit your account instantly</div>
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Use your Square Debit Card to spend right away</div>
+      </div>
+    </div>
+    <div id="feat-cost" class="detail-box" style="display:none">
+      <div class="detail-box-title">What you pay — and nothing more</div>
+      <div class="check-list">
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>You'll see the exact total cost before you accept — no surprises</div>
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>It's a flat fee, not interest — your balance never grows</div>
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>No late fees, ever</div>
+        <div class="check-item"><svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Paying early doesn't change your total — it just finishes sooner</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: HOW TO APPLY -->
+  <div id="panel-apply" class="panel">
+    <p class="slabel">How to apply for a Square Loan</p>
+    <div class="apply-steps">
+      <div class="step">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-title">Check your offer in Square Dashboard</div>
+          <div class="step-desc">Sign in and go to <strong>Banking › Loans</strong>. If you have an offer, it's waiting there. Square reviews your account daily — if nothing's showing yet, keep processing and we'll notify you when one arrives.</div>
+          <div class="step-tag"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Offers are by invitation — no offer means not yet eligible</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-title">Choose your loan amount</div>
+          <div class="step-desc">Use the slider to pick the amount that fits — from $1,000 up to your maximum offer. The fee and daily repayment rate adjust as you move the slider. A lower amount means a lower repayment rate.</div>
+          <div class="step-note"><svg viewBox="0 0 24 24"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>You don't have to take the full offer. A smaller loan means a smaller daily repayment — useful if you want more cash flowing day to day.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-title">Complete your application</div>
+          <div class="step-desc">Fill in your personal and business details for identity verification — legal name, date of birth, SSN or ITIN, and business EIN if applicable. Usually takes just a few minutes.</div>
+          <div class="step-note"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>LLC, S Corp, C Corp, or Partnership? You'll also need ownership details for anyone owning 25% or more of the business.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-title">Review and accept your terms</div>
+          <div class="step-desc">Before submitting you'll see the full breakdown — loan amount, flat fee, total repayment, and daily repayment %. Review everything, then select <strong>I accept</strong>. Applications are typically reviewed within 1–2 business days.</div>
+          <div class="step-note"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Applying has no impact on your personal credit score. Square does not report to third-party credit bureaus.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num">5</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-title">Receive your funds</div>
+          <div class="step-desc">Once approved, funds arrive in your linked bank account within 1–3 business days. With Square Checking, the money arrives <strong>instantly</strong> — spend it right away with your Square Debit Card.</div>
+          <div class="step-tag"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Instant funding available with Square Checking</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num">6</div></div>
+        <div class="step-body">
+          <div class="step-title">Repayments happen automatically</div>
+          <div class="step-desc">A fixed percentage of your daily card sales is deducted each day — nothing to set up or remember. Repayments flex with your volume, always in proportion to what you're bringing in.</div>
+          <div class="step-note"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Once your first loan is fully repaid, you may become eligible for a new offer. Check your Dashboard to see what's available.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: CALCULATOR -->
+  <div id="panel-calc" class="panel">
+    <p class="slabel">See what your loan could look like</p>
+    <div class="calc-row"><label for="l-amt">Loan amount</label><input type="range" id="l-amt" min="1000" max="250000" step="1000" value="25000" oninput="calc()"><span id="o-amt">$25,000</span></div>
+    <div class="calc-row"><label for="l-fee">Loan fee (%)</label><input type="range" id="l-fee" min="3" max="20" step="0.5" value="13.5" oninput="calc()"><span id="o-fee">13.5%</span></div>
+    <div class="calc-row"><label for="l-sales">Avg daily card sales</label><input type="range" id="l-sales" min="200" max="10000" step="100" value="1500" oninput="calc()"><span id="o-sales">$1,500</span></div>
+    <div class="calc-row"><label for="l-pct">Repayment %</label><input type="range" id="l-pct" min="5" max="28" step="1" value="16" oninput="calc()"><span id="o-pct">16%</span></div>
+    <div class="calc-results">
+      <div class="calc-result"><span class="calc-result-label">Total you repay</span><span class="calc-result-val" id="r-total">$28,375</span></div>
+      <div class="calc-result hl"><span class="calc-result-label">Your flat fee</span><span class="calc-result-val" id="r-fee">$3,375</span></div>
+      <div class="calc-result"><span class="calc-result-label">Daily payment</span><span class="calc-result-val" id="r-daily">$240</span></div>
+      <div class="calc-result"><span class="calc-result-label">Est. payoff time</span><span class="calc-result-val" id="r-days">~118 days</span></div>
+    </div>
+    <p class="calc-note">Estimates only. Your actual fee and rate are shown in your Square Dashboard before you accept.</p>
+  </div>
+
+  <!-- PANEL: COMPARE -->
+  <div id="panel-compare" class="panel">
+    <p class="slabel">What makes Square Loans different</p>
+    <div class="compare-grid">
+      <div class="compare-card hl">
+        <div class="compare-best">Square Loans</div>
+        <div class="compare-head">Square Loans</div>
+        <div class="compare-row"><svg class="icon-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Apply in minutes — no long forms</div>
+        <div class="compare-row"><svg class="icon-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>One flat fee, no compounding interest</div>
+        <div class="compare-row"><svg class="icon-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Repayments flex with your daily sales</div>
+        <div class="compare-row"><svg class="icon-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>No impact to your credit score</div>
+        <div class="compare-row"><svg class="icon-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>No personal guarantee needed</div>
+        <div class="compare-row"><svg class="icon-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Funds next day (instant w/ Checking)</div>
+        <div class="compare-row"><svg class="icon-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>No late fees, ever</div>
+      </div>
+      <div class="compare-card">
+        <div style="height:26px"></div>
+        <div class="compare-head">Traditional bank loan</div>
+        <div class="compare-row"><svg class="icon-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Weeks of paperwork and waiting</div>
+        <div class="compare-row"><svg class="icon-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Interest that grows your balance</div>
+        <div class="compare-row"><svg class="icon-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Same payment whether sales are up or down</div>
+        <div class="compare-row"><svg class="icon-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Hard credit check required</div>
+        <div class="compare-row"><svg class="icon-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Personal guarantee often required</div>
+        <div class="compare-row"><svg class="icon-warn" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Days to weeks for deposit</div>
+        <div class="compare-row"><svg class="icon-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Late payment fees apply</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: FAQ -->
+  <div id="panel-faq" class="panel">
+    <p class="slabel">Common questions</p>
+
+    <div class="faq-item">
+      <button class="faq-header" onclick="toggleFaq(this)">
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <span class="faq-q">How do I know if I'm eligible?</span>
+        <svg class="faq-chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-body">Square automatically reviews your account every day — nothing you need to do. If eligible, you'll see an offer in your Dashboard and get an email. Keep processing and we'll let you know when one becomes available. <em class="faq-tip">Check at squareup.com/dashboard/loans</em></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-header" onclick="toggleFaq(this)">
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <span class="faq-q">What does it actually cost?</span>
+        <svg class="faq-chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-body">No interest — just a single flat fee shown clearly before you accept. That number never changes. Your balance only goes down.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-header" onclick="toggleFaq(this)">
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+        <span class="faq-q">How do repayments work?</span>
+        <svg class="faq-chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-body">A fixed percentage of your daily card sales goes toward your loan automatically. Busy day = more. Slow day = less. No fixed monthly bill, no stress.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-header" onclick="toggleFaq(this)">
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <span class="faq-q">How quickly will I get my money?</span>
+        <svg class="faq-chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-body">Funds arrive in your linked bank account within 1–3 business days. With Square Checking, it's instant — spend it right away with your Square Debit Card.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-header" onclick="toggleFaq(this)">
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <span class="faq-q">Will applying hurt my credit score?</span>
+        <svg class="faq-chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-body">No — no hard inquiry, no impact to your personal credit score. No personal guarantee required for loans under $250,000.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-header" onclick="toggleFaq(this)">
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <span class="faq-q">Can I pay it off sooner?</span>
+        <svg class="faq-chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-body">Yes — prepay any time at no penalty. Your total fee stays the same; paying early just means you're done sooner.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-header" onclick="toggleFaq(this)">
+        <div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <span class="faq-q">What can I use the money for?</span>
+        <svg class="faq-chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-body">Whatever your business needs — inventory, equipment, renovations, staffing, marketing, or smoothing out a slow stretch. It's your money.</div>
+    </div>
+  </div>
+
+  <!-- PANEL: CUSTOMER STORIES -->
+  <div id="panel-social" class="panel">
+    <p class="slabel">Businesses that made it happen</p>
+    <div class="quote-card">
+      <div class="quote-text">"That loan really helped us get through when we didn't have anything at all. And when you pay it off, you feel so good."</div>
+      <div class="quote-attr">Barb Batiste — B Sweet, Los Angeles, CA</div>
+    </div>
+    <div class="quote-card">
+      <div class="quote-text">"Square's financing allowed me to renovate my store interior after having been closed due to the pandemic. This enabled me to reopen for indoor dining, which enabled me to increase my sales by over 60%."</div>
+      <div class="quote-attr">Fumio Tashiro — Mirror Tea House, Brooklyn, NY</div>
+    </div>
+    <div style="margin-top:.85rem">
+      <p class="slabel">Works for businesses like yours</p>
+      <div class="industry-tags">
+        <span class="itag"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Home &amp; repair</span>
+        <span class="itag"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Retail</span>
+        <span class="itag"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>Food &amp; drink</span>
+        <span class="itag"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>Beauty</span>
+        <span class="itag"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Fitness &amp; wellness</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-bar">
+    <div class="cta-text">
+      <strong>See if you have an offer waiting.</strong>
+      Takes seconds — no impact to your credit score.
+    </div>
+    <a href="https://squareup.com/us/en/banking/loans" target="_blank" class="cta-btn">
+      <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Check my eligibility
+    </a>
+  </div>
+
+</div>
+
+<script>
+function switchTab(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+
+function selectFeat(card, id) {
+  document.querySelectorAll('.feature-card').forEach(c => c.classList.remove('active'));
+  card.classList.add('active');
+  document.querySelectorAll('#panel-features .detail-box').forEach(d => d.style.display = 'none');
+  document.getElementById(id).style.display = 'block';
+}
+
+function toggleFaq(h) {
+  var b = h.nextElementSibling;
+  var ch = h.querySelector('.faq-chev');
+  var open = b.classList.contains('open');
+  document.querySelectorAll('.faq-body').forEach(x => x.classList.remove('open'));
+  document.querySelectorAll('.faq-chev').forEach(x => x.style.transform = '');
+  if (!open) {
+    b.classList.add('open');
+    ch.style.transform = 'rotate(180deg)';
+  }
+}
+
+function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+
+function calc() {
+  var a = +document.getElementById('l-amt').value;
+  var f = +document.getElementById('l-fee').value;
+  var s = +document.getElementById('l-sales').value;
+  var p = +document.getElementById('l-pct').value;
+  document.getElementById('o-amt').textContent = fmt(a);
+  document.getElementById('o-fee').textContent = f.toFixed(1) + '%';
+  document.getElementById('o-sales').textContent = fmt(s);
+  document.getElementById('o-pct').textContent = Math.round(p) + '%';
+  var fee = a * f / 100;
+  var total = a + fee;
+  var dp = s * (p / 100);
+  var days = Math.round(total / dp);
+  document.getElementById('r-total').textContent = fmt(total);
+  document.getElementById('r-fee').textContent = fmt(fee);
+  document.getElementById('r-daily').textContent = fmt(Math.round(dp));
+  document.getElementById('r-days').textContent = '~' + days + ' days';
+}
+
+calc();
+</script>
+</body>
+</html>
